@@ -3,12 +3,123 @@
   <head>
     <meta charset="utf-8">
     <title>Socket Game</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      input,
+      button {
+        display: block;
+        padding: 0.5em 0.75em;
+        font-family: inherit;
+        font-size: inherit;
+        color: inherit;
+        background: none;
+        border: 1px solid #666;
+      }
+
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        font-size: 1.25em;
+        color: #666;
+      }
+
+      .container {
+        max-width: 30em;
+        margin: 0 auto;
+        padding: 1em;
+      }
+
+      .form__row {
+        display: flex;
+        width: 100%;
+        margin-top: 0.5em;
+      }
+
+      .form__input {
+        flex: 1;
+        border-right: none;
+      }
+
+      .form__input:focus {
+        outline: none;
+        background-color: #f5f3ef;
+        border-style: dashed;
+        border-right-style: none;
+      }
+
+      .form__button {
+        background-color: #32acdc;
+        color: white;
+        transition: background-color 0.2s;
+      }
+
+      .form__button:hover {
+        background-color: #208fbc;
+      }
+
+      .messages {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      .messages > li {
+        padding: 1em;
+        background-color: #f5f3ef;
+        opacity: 0;
+        transform: translateY(-1em);
+        transition: all 0.2s;
+        animation: fadeInDown 0.2s forwards;
+      }
+
+      .messages > li + li {
+        margin-top: 0.5em;
+      }
+
+      .messages > li:last-child {
+        background-color: #32acdc;
+        color: white;
+      }
+
+      @keyframes fadeInDown {
+        to { opacity: 1; transform: translateY(0); };
+      }
+    </style>
   </head>
   <body>
-    <h1>Socket Game</h1>
+    <main class="container">
+      <h1>Socket Game</h1>
+      <form class="form" autocomplete="off">
+        <label for="message">Message</label>
+        <div class="form__row">
+          <input class="form__input" id="message" type="text" name="message" autofocus>
+          <button class="form__button" type="submit" name="send">Send</button>
+        </div>
+      </form>
+      <ul class="messages"></ul>
+    </main>
+
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      var socket = io();
+      const socket = io();
+      const form = document.querySelector('.form');
+      const result = document.querySelector('.messages');
+
+      form.addEventListener('submit', sendMessage);
+
+      function sendMessage(event) {
+        event.preventDefault();
+        socket.emit('message', event.target[0].value);
+        this.reset();
+      }
+
+      socket.on('message', (msg) => {
+        const message = document.createElement('li');
+        message.textContent = msg;
+        result.appendChild(message);
+      });
     </script>
   </body>
 </html>
