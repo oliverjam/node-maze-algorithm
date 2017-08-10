@@ -3,12 +3,15 @@ const app = require('express')();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
+const HOST = '10.40.72.142';
+const PORT = 6000;
+
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
 const client = new net.Socket();
-client.connect(6000, '10.40.72.142');
+client.connect(PORT, HOST);
 
 client.on('data', (data) => {
   const msg = data.toString().replace('ECHO: ', '');
