@@ -44,11 +44,11 @@
 //   return compass[currDirectionIndex + 2];
 // }
 
-function navigate(resObj, facing) {
-  let currDirection = facing || 'N';
-  const canGo = dir => resObj[dir] > 0;
+function navigate(resObj, currDirection = 'N') {
+  const canGo = direction => resObj[direction] > 0;
 
   const compass = Object.keys(resObj);
+
   const canGoSomewhere = compass.some(dir => canGo(dir));
   if (!canGoSomewhere) return 'No way out!';
 

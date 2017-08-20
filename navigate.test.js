@@ -15,6 +15,19 @@ test('First choice without facing', t => {
   t.end();
 });
 
+test('Can see the prize', t => {
+  const facing = 'N';
+  const resObj = { N: 3, E: 2, S: 2, W: 4, P: 'N' };
+  const actual = navigate(resObj, facing);
+  const expected = 'N';
+  t.equal(
+    actual,
+    expected,
+    'If the prize is to the North should always go to the north'
+  );
+  t.end();
+});
+
 test('Navigating whilst trapped!', t => {
   const facing = 'N';
   const resObj = { N: 0, E: 0, S: 0, W: 0 };
